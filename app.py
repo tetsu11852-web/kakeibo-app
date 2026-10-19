@@ -12,7 +12,11 @@ SCOPE = [
 
 @st.cache_resource
 def get_gspread_client():
-    creds = ServiceAccountCredentials.from_json_keyfile_name("credentials.json", SCOPE)
+    # StreamlitのSecretsから認証情報を辞書として取得
+    secret_dict = dict(st.secrets["gcp_service_account"])
+    
+    # 辞書データから認証情報を生成
+    creds = ServiceAccountCredentials.from_json_keyfile_dict(secret_dict, SCOPE)
     return gspread.authorize(creds)
 
 sheet = None
